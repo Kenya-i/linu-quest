@@ -19,3 +19,8 @@ type UserRepository interface {
 	FindByEmail(ctx context.Context, email string) (*User, error)
 	SaveUser(ctx context.Context, user *User) error
 }
+
+type UserUsecase interface {
+	Register(ctx context.Context, username string, email string, password string) (*User, error)
+	Login(ctx context.Context, username string, password string) (string, error)
+}
