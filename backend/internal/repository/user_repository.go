@@ -52,7 +52,7 @@ func (r *userRepository) FindByEmail(ctx context.Context, email string) (*domain
 }
 
 func (r *userRepository) SaveUser(ctx context.Context, user *domain.User) error {
-	query := `INSERT INTO USERS (USERNAME, EMAIL, HASHED_PASSWORD) VALUES ($1, $2, $3)`
-	_, err := r.db.Exec(ctx, query, user.Username, user.Email, user.HashedPassword)
+	query := `INSERT INTO USERS (USERNAME, EMAIL, HASHED_PASSWORD) VALUES ($1, $2, $3) RETURNING ID, CREATED_AT, UPDATED_AT`
+	err := r.db.QueryRow(ctx, query, user.Username, user.Email, user.HashedPassword).Scan(&user.ID, &user.CreatedAt, &user.UpdatedAt)
 	return err
 }
