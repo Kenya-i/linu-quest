@@ -17,6 +17,7 @@ services:
       - "8080:8080"
     environment:
       DATABASE_URL: postgres://linuquest_user:password@db:5432/linuquest
+      JWT_SECRET: dev_token
     depends_on:
       - db
 
