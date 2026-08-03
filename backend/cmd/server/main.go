@@ -8,6 +8,7 @@ import (
 	"github.com/Kenya-i/linu-quest/internal/handler"
 	"github.com/Kenya-i/linu-quest/internal/repository"
 	"github.com/Kenya-i/linu-quest/internal/usecase"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -40,6 +41,13 @@ func main() {
 	userHandler := handler.NewUserHandler(userUsecase)
 
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Content-Type"},
+		AllowCredentials: true,
+	}))
 
 	r.POST("/register", userHandler.Register)
 	r.POST("/login", userHandler.Login)
