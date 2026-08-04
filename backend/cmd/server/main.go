@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/Kenya-i/linu-quest/internal/handler"
+	"github.com/Kenya-i/linu-quest/internal/middleware"
 	"github.com/Kenya-i/linu-quest/internal/repository"
 	"github.com/Kenya-i/linu-quest/internal/usecase"
 	"github.com/gin-contrib/cors"
@@ -51,6 +52,8 @@ func main() {
 
 	r.POST("/register", userHandler.Register)
 	r.POST("/login", userHandler.Login)
+
+	r.GET("/me", middleware.AuthMiddleware([]byte(jwtSecret)), userHandler.Me)
 
 	r.Run(":8080")
 

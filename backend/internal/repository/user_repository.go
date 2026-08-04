@@ -32,6 +32,7 @@ func (r *userRepository) FindByUsername(ctx context.Context, username string) (*
 
 	return &user, nil
 }
+
 func (r *userRepository) FindByEmail(ctx context.Context, email string) (*domain.User, error) {
 	query := `SELECT ID, USERNAME, EMAIL, HASHED_PASSWORD, CREATED_AT, UPDATED_AT FROM USERS WHERE EMAIL = $1`
 	var user domain.User
@@ -55,4 +56,22 @@ func (r *userRepository) SaveUser(ctx context.Context, user *domain.User) error 
 	query := `INSERT INTO USERS (USERNAME, EMAIL, HASHED_PASSWORD) VALUES ($1, $2, $3) RETURNING ID, CREATED_AT, UPDATED_AT`
 	err := r.db.QueryRow(ctx, query, user.Username, user.Email, user.HashedPassword).Scan(&user.ID, &user.CreatedAt, &user.UpdatedAt)
 	return err
+}
+
+func (r *userRepository) FindByID(ctx context.Context, id string) (*domain.User, error) {
+	query := `SELECT ID, USERNAME, EMAIL, HASHED_PASSWORD, CREATED_AT, UPDATED_AT FROM USERS WHERE ID = $1`
+	var user domain.User
+	err := r.db.QueryRow(ctx, query, id).Scan(
+		&user.ID,
+		&user.Username,
+		&user.Email,
+		&user.HashedPassword,
+		&user.CreatedAt,
+		&user.UpdatedAt)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
