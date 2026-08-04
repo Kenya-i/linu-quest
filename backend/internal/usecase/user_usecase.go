@@ -63,3 +63,7 @@ func (u *userUsecase) Login(ctx context.Context, username string, password strin
 
 	return signedToken, nil
 }
+
+func (u *userUsecase) GetUserByID(ctx context.Context, id string) (*domain.User, error) {
+	return u.userRepo.FindByID(ctx, id)
+}
