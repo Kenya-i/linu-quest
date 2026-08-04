@@ -3,9 +3,11 @@
 import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { API_URL } from "@/lib/api"
+import { useAuth } from "../context/AuthContext"
 
 export default function Login() {
     const router = useRouter()
+    const { refetch } = useAuth()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
@@ -29,6 +31,7 @@ export default function Login() {
         return
       }
 
+      refetch()
       router.push('/')
     }
 
