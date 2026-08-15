@@ -40,6 +40,13 @@ func main() {
 	userRepo := repository.NewUserRepository(db)
 	userUsecase := usecase.NewUserUsecase(userRepo, []byte(jwtSecret))
 	userHandler := handler.NewUserHandler(userUsecase)
+	stageRepo := repository.NewStageRepository(db)
+	stageUsecase := usecase.NewStageUsecase(stageRepo)
+	stageHandler := handler.NewStageHandler(stageUsecase)
+
+	questionRepo := repository.NewQuestionRepository(db)
+	questionUsecase := usecase.NewQuestionUsecase(questionRepo)
+	questionHandler := handler.NewQuestionHandler(questionUsecase)
 
 	r := gin.Default()
 
@@ -54,6 +61,9 @@ func main() {
 	r.POST("/login", userHandler.Login)
 
 	r.GET("/me", middleware.AuthMiddleware([]byte(jwtSecret)), userHandler.Me)
+	r.GET("/stages", stageHandler.List)
+	r.GET("/stages/:id/questions", questionHandler.ListByStage)
+	r.POST("/questions/:id/answer", questionHandler.CheckAnswer)
 
 	r.Run(":8080")
 
